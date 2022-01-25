@@ -38,7 +38,9 @@ public class DataBase {
         origin.numberOfBranches++;
         KDTree branches = origin.branches;
         branches._root = branches.insert(branches._root ,node, 0);
-        banks._root = banks.insert(banks._root , node, 0);
+        //banks._root = banks.insert(banks._root , node, 0);
+        banks.printTree(banks._root); // TODO
+        System.out.println("***");
         branches.printTree(branches._root);
         System.out.println();
         if (bankWithMostBranches == null){
@@ -88,6 +90,9 @@ public class DataBase {
         if (node == null){
             return;
         }
+        if (node.object instanceof Bank){
+            getBanksOfNeighbourhood(((Bank) node.object).branches._root, neighbourhood, 0);
+        }
         if (node.x >= neighbourhood.x1 && node.x <= neighbourhood.x2 && node.y >= neighbourhood.y1 && node.y <= neighbourhood.y2){
             System.out.print(node.object+" ");
         }
@@ -118,8 +123,11 @@ public class DataBase {
         if (node == null){
             return;
         }
+        if (node.object instanceof Bank){
+            getBanksOfNeighbourhood(((Bank) node.object).branches._root, x, y, r,0);
+        }
         double distance = (node.x - x)*(node.x - x) + (node.y - y)*(node.y - y);
-        if (distance < r*r){
+        if (distance <= r*r){
             System.out.print(node.object+" ");
         }
         if (step % 2 == 0){

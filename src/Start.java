@@ -33,7 +33,7 @@ class Start {
             else if (request.equals("quit")){
                 break;
             }
-
+            System.out.println("---------------------------------");
         }
     }
     public void help(){
