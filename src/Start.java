@@ -25,6 +25,10 @@ class Start {
                 addNeighbourhood(request);
             }else if (request.split(" ")[0].equals("mostBrs")){
                 getBankWithMostBranches();
+            }else if (request.split(" ")[0].equals("listB")){
+                listBanksNeighbourhood(request);
+            }else if (request.split(" ")[0].equals("availB")){
+                getAvailableBanks(request);
             }
             else if (request.equals("quit")){
                 break;
@@ -39,6 +43,8 @@ class Start {
         System.out.println("3. listBrs [name]");
         System.out.println("4. addN [name] [(x,y)] [(m,n)] [(z,t)] [(k,r)]");
         System.out.println("5. mostBrs");
+        System.out.println("6. listB [name]");
+        System.out.println("7. availB [(x,y)] r");
     }
     public void addBank(String request){
         String[] coordinates = request.split(" ")[2].substring(1, request.split(" ")[2].length()-1).split(",");
@@ -63,11 +69,28 @@ class Start {
     }
     void addNeighbourhood(String request){
         String name = request.split(" ")[1];
-        String[] coordinate = request.split(" ");
+        String[] coordinate = new String[4];
+        coordinate[0] = request.split(" ")[2];
+        coordinate[1] = request.split(" ")[3];
+        coordinate[2] = request.split(" ")[4];
+        coordinate[3] = request.split(" ")[5];
         dataBase.addNeighbourhood(name, coordinate);
     }
     void getBankWithMostBranches(){
         System.out.println(dataBase.bankWithMostBranches.name);
     }
+    void listBanksNeighbourhood(String request){
+        dataBase.listBanksNeighbourhood(request.split(" ")[1]);
+    }
+    void getAvailableBanks(String request){
+        int r = Integer.parseInt(request.split(" ")[2]);
+        String coordinate = request.split(" ")[1];
+        coordinate = coordinate.substring(1, coordinate.length()-1);
+        int x = Integer.parseInt(coordinate.split(",")[0]);
+        int y = Integer.parseInt(coordinate.split(",")[1]);
+        dataBase.getAvailableBanks(x, y, r);
+    }
+
+
 }
 
