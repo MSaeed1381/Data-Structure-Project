@@ -1,30 +1,12 @@
-import java.util.ArrayList;
-
 public class DataBase {
     Bank bankWithMostBranches = null;
     KDTree banks = new KDTree();
-    //ArrayList<Bank> bankArrayList = new ArrayList<>();
     TrieTree bankTrieTree = new TrieTree();
-    ArrayList<Neighbourhood> neighbourhoods = new ArrayList<>();
+    TrieTree neighbourhoodsTrieTree = new TrieTree();
+
     DataBase(){
         bankTrieTree.root = new TNode();
-    }
-
-    /*Bank search(String name){
-        for (Bank b:bankArrayList) {
-            if (name.equals(b.name)){
-                return b;
-            }
-        }
-        return null;
-    }*/
-    Neighbourhood searchNeighbourhood(String name){
-        for (Neighbourhood n:neighbourhoods) {
-            if (name.equals(n.name)){
-                return n;
-            }
-        }
-        return null;
+        neighbourhoodsTrieTree.root = new TNode();
     }
     boolean addBank(String name, int x, int y){
         Bank newBank = new Bank(name, x, y);
@@ -84,10 +66,10 @@ public class DataBase {
             }
         }
         Neighbourhood neighbourhood = new Neighbourhood(name, minX, minY, maxX, maxY);
-        neighbourhoods.add(neighbourhood);
+        neighbourhoodsTrieTree.add(neighbourhood.name, neighbourhood);
     }
     void listBanksNeighbourhood(String neighbourhood){
-        Neighbourhood neighbour = searchNeighbourhood(neighbourhood);
+        Neighbourhood neighbour = (Neighbourhood) neighbourhoodsTrieTree.search(neighbourhood).object;
         getBanksOfNeighbourhood(this.banks._root, neighbour, 0);
     }
 

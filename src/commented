@@ -1,0 +1,18 @@
+//ArrayList<Bank> bankArrayList = new ArrayList<>();
+//ArrayList<Neighbourhood> neighbourhoods = new ArrayList<>();
+/*Bank search(String name){
+        for (Bank b:bankArrayList) {
+            if (name.equals(b.name)){
+                return b;
+            }
+        }
+        return null;
+    }*/
+    /*Neighbourhood searchNeighbourhood(String name){
+        for (Neighbourhood n:neighbourhoods) {
+            if (name.equals(n.name)){
+                return n;
+            }
+        }
+        return null;
+    }*/
