@@ -21,6 +21,10 @@ class Start {
                 addBranch(request);
             }else if (request.split(" ")[0].equals("listBrs")){
                 getListOfBranches(request.split(" ")[1]);
+            }else if (request.split(" ")[0].equals("addN")){
+                addNeighbourhood(request);
+            }else if (request.split(" ")[0].equals("mostBrs")){
+                getBankWithMostBranches();
             }
             else if (request.equals("quit")){
                 break;
@@ -33,6 +37,8 @@ class Start {
         System.out.println("1. addB [name] [(x,y)]");
         System.out.println("2. addBr [name] [branchName] [(x,y)]");
         System.out.println("3. listBrs [name]");
+        System.out.println("4. addN [name] [(x,y)] [(m,n)] [(z,t)] [(k,r)]");
+        System.out.println("5. mostBrs");
     }
     public void addBank(String request){
         String[] coordinates = request.split(" ")[2].substring(1, request.split(" ")[2].length()-1).split(",");
@@ -52,4 +58,16 @@ class Start {
             System.out.println("the bank added :)");
         }
     }
+    public void getListOfBranches(String name){
+        dataBase.getListOfBranches(name);
+    }
+    void addNeighbourhood(String request){
+        String name = request.split(" ")[1];
+        String[] coordinate = request.split(" ");
+        dataBase.addNeighbourhood(name, coordinate);
+    }
+    void getBankWithMostBranches(){
+        System.out.println(dataBase.bankWithMostBranches.name);
+    }
+}
 

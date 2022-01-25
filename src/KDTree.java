@@ -1,9 +1,12 @@
 class Node{
-    Bank bank;
+    Object object;
     Node right, left;
-    Node(Bank bank){
-        this.bank = bank;
+    int x, y;
+    Node(Object object, int x, int y){
+        this.object = object;
         right = left = null;
+        this.x = x;
+        this.y = y;
     }
 }
 public class KDTree {
@@ -17,13 +20,13 @@ public class KDTree {
             return node;
         }
         if (step % 2 == 0){
-            if (node.bank.x >= root.bank.x){
+            if (node.x >= root.x){
                 root.right =  insert(root.right, node, step+1);
             }else{
                 root.left = insert(root.left, node, step+1);
             }
         }else{
-            if (node.bank.y >= root.bank.y){
+            if (node.y >= root.y){
                 root.right =  insert(root.right, node, step+1);
             }else{
                 root.left = insert(root.left, node, step+1);
@@ -35,7 +38,7 @@ public class KDTree {
         if (root == null){
             return;
         }
-        System.out.print(root.bank + " ");
+        System.out.print(root.object + " ");
         printTree(root.left);
         printTree(root.right);
     }
