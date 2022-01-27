@@ -16,3 +16,20 @@
         }
         return null;
     }*/
+    /*System.out.println(root.x + " " + root.y);
+                    Node n = findParent(root.x, root.y, 2);
+
+                    System.out.println(n.x+" "+n.y);
+                    if ((step+1) % 2 == 0){
+                        if (n.x >= root.x){
+                            n.left = null;
+                        }else{
+                            n.right = null;
+                        }
+                    }else{
+                        if (n.y >= root.y){
+                            n.left = null;
+                        }else{
+                            n.right = null;
+                        }
+                    }*/

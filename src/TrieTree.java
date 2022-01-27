@@ -8,10 +8,10 @@
 }
 public class TrieTree {
     TNode root;
-    void add(String key, Object object) {
+    void add(String name, Object object) {
         TNode tNode = root;
-        for (int i = 0; i < key.length(); i++) {
-            int index = key.charAt(i) - '0';
+        for (int i = 0; i < name.length(); i++) {
+            int index = name.charAt(i) - '0';
             if (tNode.children[index] == null)
                 tNode.children[index] = new TNode();
             tNode = tNode.children[index];
@@ -20,13 +20,13 @@ public class TrieTree {
         tNode.object = object;
     }
 
-        TNode search(String key) {
+        TNode search(String name) {
         int level;
-        int length = key.length();
+        int length = name.length();
         int index;
         TNode tNode = root;
         for (level = 0; level < length; level++) {
-            index = key.charAt(level) - '0';
+            index = name.charAt(level) - '0';
             if (tNode.children[index] == null)
                 return null;
             tNode = tNode.children[index];

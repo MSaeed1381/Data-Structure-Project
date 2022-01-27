@@ -137,4 +137,21 @@ public class DataBase {
             }
         }
     }
+    void deleteBranch(String name, int x, int y){
+        Bank bank = (Bank) bankTrieTree.search(name).object;
+        if (bank == null){
+            System.out.println("there is not a bank with name " + name);
+        }else{
+            KDTree branches = bank.branches;
+            if (branches.isExistPoint(x, y)){
+                branches._root = branches.deleteNode(branches._root, x, y, 0);
+                System.out.println("deleted successfully! :)");
+            }else{
+                System.out.println("bank " + name + " has not this branch!");
+            }
+             branches.printTree(branches._root);
+        }
+
+    }
+
 }

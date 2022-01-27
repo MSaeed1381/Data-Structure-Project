@@ -29,6 +29,8 @@ class Start {
                 listBanksNeighbourhood(request);
             }else if (request.split(" ")[0].equals("availB")){
                 getAvailableBanks(request);
+            }else if (request.split(" ")[0].equals("delBr")){
+                deleteBranch(request);
             }
             else if (request.equals("quit")){
                 break;
@@ -45,6 +47,7 @@ class Start {
         System.out.println("5. mostBrs");
         System.out.println("6. listB [name]");
         System.out.println("7. availB [(x,y)] r");
+        System.out.println("8. delBr [name of bank] [(x,y)]");
     }
     public void addBank(String request){
         String[] coordinates = request.split(" ")[2].substring(1, request.split(" ")[2].length()-1).split(",");
@@ -90,5 +93,14 @@ class Start {
         int y = Integer.parseInt(coordinate.split(",")[1]);
         dataBase.getAvailableBanks(x, y, r);
     }
+    void deleteBranch(String request){
+        String name = request.split(" ")[1];
+        String coordinates = request.split(" ")[2];
+        String[] coordinate = coordinates.substring(1, coordinates.length()-1).split(",");
+        int x = Integer.parseInt(coordinate[0]);
+        int y = Integer.parseInt(coordinate[1]);
+        dataBase.deleteBranch(name, x, y);
+    }
+
 }
 
