@@ -24,15 +24,15 @@ public class TrieTree {
         int level;
         int length = key.length();
         int index;
-        TNode pCrawl = root;
+        TNode tNode = root;
         for (level = 0; level < length; level++) {
             index = key.charAt(level) - '0';
-            if (pCrawl.children[index] == null)
+            if (tNode.children[index] == null)
                 return null;
-            pCrawl = pCrawl.children[index];
+            tNode = tNode.children[index];
         }
-        if (pCrawl.isEnd){
-            return pCrawl;
+        if (tNode.isEnd){
+            return tNode;
         }
         return null;
     }

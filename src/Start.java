@@ -20,7 +20,7 @@ class Start {
             }else if (request.split(" ")[0].equals("addBr")){
                 addBranch(request);
             }else if (request.split(" ")[0].equals("listBrs")){
-                getListOfBranches(request.split(" ")[1]);
+                getListOfBranches(request);
             }else if (request.split(" ")[0].equals("addN")){
                 addNeighbourhood(request);
             }else if (request.split(" ")[0].equals("mostBrs")){
@@ -64,8 +64,8 @@ class Start {
             System.out.println("the bank added :)");
         }
     }
-    public void getListOfBranches(String name){
-        dataBase.getListOfBranches(name);
+    public void getListOfBranches(String request){
+        dataBase.getListOfBranches(request.split(" ")[1]);
     }
     void addNeighbourhood(String request){
         String name = request.split(" ")[1];
@@ -90,7 +90,5 @@ class Start {
         int y = Integer.parseInt(coordinate.split(",")[1]);
         dataBase.getAvailableBanks(x, y, r);
     }
-
-
 }
 
