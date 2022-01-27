@@ -46,6 +46,9 @@ public class KDTree {
         if (root == null) {
             return null;
         }
+        if (root.object instanceof Bank){
+            return search(((Bank) root.object).branches._root, x, y, 0);
+        }
         if (root.x == x && root.y == y) {
             return root;
         }

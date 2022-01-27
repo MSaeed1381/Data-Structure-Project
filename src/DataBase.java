@@ -8,14 +8,19 @@ public class DataBase {
         bankTrieTree.root = new TNode();
         neighbourhoodsTrieTree.root = new TNode();
     }
-    boolean addBank(String name, int x, int y){
-        Bank newBank = new Bank(name, x, y);
-        bankTrieTree.add(newBank.name, newBank); //TODO
-        Node node = new Node(newBank, x, y);
-        banks._root = banks.insert(banks._root ,node, 0);
-        banks.printTree(banks._root);
-        System.out.println();
-        return true;
+    void addBank(String name, int x, int y){
+        if (banks.isExistPoint(x, y)){
+            System.out.println("there is a bank at this point :(");
+        }else{
+            Bank newBank = new Bank(name, x, y);
+            bankTrieTree.add(newBank.name, newBank);
+            Node node = new Node(newBank, x, y);
+            banks._root = banks.insert(banks._root ,node, 0);
+            System.out.println("bank " + newBank + " added to system :)");
+            banks.printTree(banks._root);
+            System.out.println();
+        }
+
     }
 
     boolean addBranch(String name, String branchName, int x, int y){
@@ -44,10 +49,10 @@ public class DataBase {
         origin.branches.printTree(origin.branches._root);
     }
     void addNeighbourhood(String name, String[] coordinates){
-    int minX = 100000;
-    int minY = 100000;
-    int maxX = -100000;
-    int maxY = -100000;
+    int minX = 1000000;
+    int minY = 1000000;
+    int maxX = -1000000;
+    int maxY = -1000000;
         for (String coordinate:coordinates) {
             String[] co = coordinate.substring(1, coordinate.length()-1).split(",");
             int x = Integer.parseInt(co[0]);
