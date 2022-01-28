@@ -8,41 +8,42 @@ public class DataBase {
         bankTrieTree.root = new TNode();
         neighbourhoodsTrieTree.root = new TNode();
     }
-    void addBank(String name, int x, int y){
+    public String addBank(String name, int x, int y){
+        String answer = "";
         if (banks.isExistPoint(x, y)){
-            System.out.println("there is a bank at this point :(");
+            answer = "there is a bank at this point :(";
         }else{
             Bank newBank = new Bank(name, x, y);
             bankTrieTree.add(newBank.name, newBank);
             Node node = new Node(newBank, x, y);
             banks._root = banks.insert(banks._root ,node, 0);
-            System.out.println("bank " + newBank + " added to system :)");
-            banks.printTree(banks._root);
-            System.out.println();
+            answer = "bank " + newBank + " added to system :)";
         }
-
+        return answer;
     }
 
-    boolean addBranch(String name, String branchName, int x, int y){
-        Branch newBranch = new Branch(name, branchName, x, y);
-        Node node = new Node(newBranch, x, y);
-        Bank origin = (Bank) bankTrieTree.search(name).object;
-        origin.numberOfBranches++;
-        KDTree branches = origin.branches;
-        branches._root = branches.insert(branches._root ,node, 0);
-        //banks._root = banks.insert(banks._root , node, 0);
-        banks.printTree(banks._root); // TODO
-        System.out.println("***");
-        branches.printTree(branches._root);
-        System.out.println();
-        if (bankWithMostBranches == null){
-            bankWithMostBranches = origin;
-        }else{
-            if (origin.numberOfBranches > bankWithMostBranches.numberOfBranches){
-                bankWithMostBranches = origin;
-            }
+    public String addBranch(String name, String branchName, int x, int y){
+        String answer = "";
+        if (banks.isExistPoint(x, y)){
+            answer = "there is a bank at this point :(";
         }
-        return true;
+        else {
+            Branch newBranch = new Branch(name, branchName, x, y);
+            Node node = new Node(newBranch, x, y);
+            Bank origin = (Bank) bankTrieTree.search(name).object;
+            origin.numberOfBranches++;
+            KDTree branches = origin.branches;
+            branches._root = branches.insert(branches._root ,node, 0);
+            if (bankWithMostBranches == null){
+                bankWithMostBranches = origin;
+            }else{
+                if (origin.numberOfBranches > bankWithMostBranches.numberOfBranches){
+                    bankWithMostBranches = origin;
+                }
+            }
+            answer = "the branch "+branchName + " added to bank "+name + " branches :)";
+        }
+        return answer;
     }
     public void getListOfBranches(String name){
         Bank origin = (Bank) bankTrieTree.search(name).object;
@@ -155,6 +156,37 @@ public class DataBase {
                 System.out.println("bank " + name + " has not this branch!");
             }
              branches.printTree(branches._root);
+        }
+
+    }
+    void restart(){
+        this.bankWithMostBranches = null;
+        this.banks = new KDTree();
+        this.bankTrieTree = new TrieTree();
+        this.neighbourhoodsTrieTree = new TrieTree();
+        this.bankTrieTree.root = new TNode();
+        this.neighbourhoodsTrieTree.root = new TNode();
+    }
+    void printPreOrderBanks(){
+        if (banks._root == null){
+            System.out.println("there aren't any bank in system!");
+        }else{
+            banks.printTree(banks._root);
+            System.out.println();
+        }
+
+    }
+    void printPreOrderBranches(String name){
+        try {
+            KDTree branches = ((Bank)bankTrieTree.search(name).object).branches;
+            if (branches._root == null){
+                System.out.println("there aren't any bank in system!");
+            }else{
+                branches.printTree(branches._root);
+                System.out.println();
+            }
+        }catch (Exception e){
+            System.out.println("this bank does not exist!");
         }
 
     }

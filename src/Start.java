@@ -6,27 +6,40 @@ class Main{
     }
 }
 class Start {
-    String error = "you don't follow the pattern\ntype command 'help'";
-    DataBase dataBase = new DataBase();
+    private final String ERROR = "you don't follow the pattern\ntype command 'help' to see all correct commands";
+    private final DataBase dataBase;
+    String[] commands;
+    Start(){
+        dataBase = new DataBase();
+        commands = new String[100];
+        commands[0] = "restart";
+    }
+
+    int commandCounter = 1;
     public void runApp() {
         Scanner input = new Scanner(System.in);
         welcome();
-        System.out.println("type 'help' to see all commands");
+        System.out.println("type 'help' to see commands");
         while (true){
             String request = input.nextLine();
+            commands[commandCounter] = request;
             switch (request.split(" ")[0]){
                 case "help":help();break;
-                case "addB":addBank(request);break;
-                case "addBr":addBranch(request);break;
+                case "addB": System.out.println(addBank(request));break;
+                case "addBr": System.out.println(addBranch(request));break;
                 case "listBrs":getListOfBranches(request);break;
                 case "addN": addNeighbourhood(request);break;
                 case "mostBrs":getBankWithMostBranches();break;
                 case "listB":listBanksNeighbourhood(request);break;
                 case "availB":getAvailableBanks(request);break;
                 case "delBr":deleteBranch(request);break;
+                case "undo":undo(request);break;
+                case "printPreB":printPreOrderBanks();break;
+                case "printPreBr":printPreOrderBranch(request);break;
                 case "quit": return;
                 default: error();
             }
+            commandCounter++;
             System.out.println("---------------------------------");
         }
     }
@@ -40,31 +53,36 @@ class Start {
         System.out.println("6. listB [name]");
         System.out.println("7. availB [(x,y)] r");
         System.out.println("8. delBr [name of bank] [(x,y)]");
+        System.out.println("9. undo [p]  -> (p = 0 restart the system)");
+        System.out.println("10. printPreB");
+        System.out.println("11. printPreBr [name]");
     }
     public void welcome(){
-        System.out.println(" ____       _      _   _   _  __  ___   _   _    ____      ____   __   __  ____    _____   _____   __  __ \n" +
-                "| __ )     / \\    | \\ | | | |/ / |_ _| | \\ | |  / ___|    / ___|  \\ \\ / / / ___|  |_   _| | ____| |  \\/  |\n" +
-                "|  _ \\    / _ \\   |  \\| | | ' /   | |  |  \\| | | |  _     \\___ \\   \\ V /  \\___ \\    | |   |  _|   | |\\/| |\n" +
-                "| |_) |  / ___ \\  | |\\  | | . \\   | |  | |\\  | | |_| |     ___) |   | |    ___) |   | |   | |___  | |  | |\n" +
-                "|____/  /_/   \\_\\ |_| \\_| |_|\\_\\ |___| |_| \\_|  \\____|    |____/    |_|   |____/    |_|   |_____| |_|  |_|\n");
+        System.out.println("""
+                 ____       _      _   _   _  __  ___   _   _    ____      ____   __   __  ____    _____   _____   __  __\s
+                | __ )     / \\    | \\ | | | |/ / |_ _| | \\ | |  / ___|    / ___|  \\ \\ / / / ___|  |_   _| | ____| |  \\/  |
+                |  _ \\    / _ \\   |  \\| | | ' /   | |  |  \\| | | |  _     \\___ \\   \\ V /  \\___ \\    | |   |  _|   | |\\/| |
+                | |_) |  / ___ \\  | |\\  | | . \\   | |  | |\\  | | |_| |     ___) |   | |    ___) |   | |   | |___  | |  | |
+                |____/  /_/   \\_\\ |_| \\_| |_|\\_\\ |___| |_| \\_|  \\____|    |____/    |_|   |____/    |_|   |_____| |_|  |_|
+                """);
     }
     public void error(){
         System.out.println("this command doesn't exist. please type 'help' to see all commands");
     }
-    public void addBank(String request){
+    public String addBank(String request){
         try {
             String[] coordinates = request.split(" ")[2].substring(1, request.split(" ")[2].length()-1).split(",");
-            dataBase.addBank(request.split(" ")[1], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+            return dataBase.addBank(request.split(" ")[1], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
         }catch (Exception e){
-            System.out.println(error);
+            return ERROR;
         }
     }
-    public void addBranch(String request){
+    public String addBranch(String request){
         try {
             String[] coordinates = request.split(" ")[3].substring(1, request.split(" ")[3].length()-1).split(",");
-            dataBase.addBranch(request.split(" ")[1], request.split(" ")[2], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+            return dataBase.addBranch(request.split(" ")[1], request.split(" ")[2], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
         }catch (Exception e){
-            System.out.println("");
+            return ERROR;
         }
     }
     public void getListOfBranches(String request){
@@ -80,7 +98,7 @@ class Start {
             coordinate[3] = request.split(" ")[5];
             dataBase.addNeighbourhood(name, coordinate);
         }catch (Exception e){
-            System.out.println(error);
+            System.out.println(ERROR);
         }
     }
     void getBankWithMostBranches(){
@@ -105,6 +123,28 @@ class Start {
         int y = Integer.parseInt(coordinate[1]);
         dataBase.deleteBranch(name, x, y);
     }
+    void undo(String request){
+        int p = Integer.parseInt(request.split(" ")[1]);
+        for (int i = 0; i <= p; i++) {
+            String command = this.commands[i];
+            switch (command.split(" ")[0]){
+                case "addB":addBank(command);break;
+                case "addBr":addBranch(command);break;
+                case "addN":addNeighbourhood(command);break;
+                case "delBr":deleteBranch(command);break;
+                case "undo": undo(command);break;
+                case "restart": dataBase.restart();break;
+                default:break;
+            }
+        }
+    }
+    void printPreOrderBanks(){
+        dataBase.printPreOrderBanks();
+    }
+    void printPreOrderBranch(String request){
+        dataBase.printPreOrderBranches(request.split(" ")[1]);
+    }
+
 
 }
 
