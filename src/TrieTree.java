@@ -1,6 +1,6 @@
  class TNode {
     Object object;
-    TNode[] children = new TNode[150];
+    TNode[] children = new TNode[100];
     boolean isEnd;
     TNode(){
         this.isEnd = false;
@@ -11,7 +11,7 @@ public class TrieTree {
     void add(String name, Object object) {
         TNode tNode = root;
         for (int i = 0; i < name.length(); i++) {
-            int index = name.charAt(i) - '0';
+            int index = name.charAt(i) - '!';
             if (tNode.children[index] == null)
                 tNode.children[index] = new TNode();
             tNode = tNode.children[index];
@@ -26,7 +26,7 @@ public class TrieTree {
         int index;
         TNode tNode = root;
         for (level = 0; level < length; level++) {
-            index = name.charAt(level) - '0';
+            index = name.charAt(level) - '!';
             if (tNode.children[index] == null)
                 return null;
             tNode = tNode.children[index];

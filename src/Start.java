@@ -6,7 +6,7 @@ class Main{
     }
 }
 class Start {
-    private final String ERROR = "you don't follow the pattern\ntype command 'help' to see all correct commands";
+    private final String ERROR = "you don't follow the pattern. type command 'help' to see all correct commands";
     private final DataBase dataBase;
     String[] commands;
     Start(){
@@ -28,16 +28,18 @@ class Start {
                 case "addB": System.out.println(addBank(request));break;
                 case "addBr": System.out.println(addBranch(request));break;
                 case "listBrs":getListOfBranches(request);break;
-                case "addN": addNeighbourhood(request);break;
+                case "addN": System.out.println(addNeighbourhood(request));break;
                 case "mostBrs":getBankWithMostBranches();break;
                 case "listB":listBanksNeighbourhood(request);break;
                 case "availB":getAvailableBanks(request);break;
-                case "delBr":deleteBranch(request);break;
-                case "undo":undo(request);break;
+                case "delBr": System.out.println(deleteBranch(request));break;
+                case "undo": System.out.println(undo(request));break;
                 case "printPreB":printPreOrderBanks();break;
                 case "printPreBr":printPreOrderBranch(request);break;
+                case "nearB": getNearestBank(request);break;
+                case "nearBr":getNearestBranch(request);break;
                 case "quit": return;
-                default: error();
+                default: System.out.println(ERROR);
             }
             commandCounter++;
             System.out.println("---------------------------------");
@@ -56,6 +58,7 @@ class Start {
         System.out.println("9. undo [p]  -> (p = 0 restart the system)");
         System.out.println("10. printPreB");
         System.out.println("11. printPreBr [name]");
+        System.out.println("12. nearB [(x,y)]");
     }
     public void welcome(){
         System.out.println("""
@@ -65,9 +68,6 @@ class Start {
                 | |_) |  / ___ \\  | |\\  | | . \\   | |  | |\\  | | |_| |     ___) |   | |    ___) |   | |   | |___  | |  | |
                 |____/  /_/   \\_\\ |_| \\_| |_|\\_\\ |___| |_| \\_|  \\____|    |____/    |_|   |____/    |_|   |_____| |_|  |_|
                 """);
-    }
-    public void error(){
-        System.out.println("this command doesn't exist. please type 'help' to see all commands");
     }
     public String addBank(String request){
         try {
@@ -86,9 +86,13 @@ class Start {
         }
     }
     public void getListOfBranches(String request){
-        dataBase.getListOfBranches(request.split(" ")[1]);
+        try {
+            dataBase.getListOfBranches(request.split(" ")[1]);
+        }catch (Exception e){
+            System.out.println(ERROR);
+        }
     }
-    void addNeighbourhood(String request){
+    String addNeighbourhood(String request){
         try {
             String name = request.split(" ")[1];
             String[] coordinate = new String[4];
@@ -96,53 +100,113 @@ class Start {
             coordinate[1] = request.split(" ")[3];
             coordinate[2] = request.split(" ")[4];
             coordinate[3] = request.split(" ")[5];
-            dataBase.addNeighbourhood(name, coordinate);
+            return dataBase.addNeighbourhood(name, coordinate);
+        }catch (Exception e){
+            return ERROR;
+        }
+    }
+    void getBankWithMostBranches(){ //TODO
+        try {
+            dataBase.getBankWithMostBranches();
         }catch (Exception e){
             System.out.println(ERROR);
         }
     }
-    void getBankWithMostBranches(){
-        System.out.println(dataBase.bankWithMostBranches.name);
-    }
     void listBanksNeighbourhood(String request){
-        dataBase.listBanksNeighbourhood(request.split(" ")[1]);
-    }
-    void getAvailableBanks(String request){
-        int r = Integer.parseInt(request.split(" ")[2]);
-        String coordinate = request.split(" ")[1];
-        coordinate = coordinate.substring(1, coordinate.length()-1);
-        int x = Integer.parseInt(coordinate.split(",")[0]);
-        int y = Integer.parseInt(coordinate.split(",")[1]);
-        dataBase.getAvailableBanks(x, y, r);
-    }
-    void deleteBranch(String request){
-        String name = request.split(" ")[1];
-        String coordinates = request.split(" ")[2];
-        String[] coordinate = coordinates.substring(1, coordinates.length()-1).split(",");
-        int x = Integer.parseInt(coordinate[0]);
-        int y = Integer.parseInt(coordinate[1]);
-        dataBase.deleteBranch(name, x, y);
-    }
-    void undo(String request){
-        int p = Integer.parseInt(request.split(" ")[1]);
-        for (int i = 0; i <= p; i++) {
-            String command = this.commands[i];
-            switch (command.split(" ")[0]){
-                case "addB":addBank(command);break;
-                case "addBr":addBranch(command);break;
-                case "addN":addNeighbourhood(command);break;
-                case "delBr":deleteBranch(command);break;
-                case "undo": undo(command);break;
-                case "restart": dataBase.restart();break;
-                default:break;
-            }
+        try {
+            dataBase.listBanksNeighbourhood(request.split(" ")[1]);
+        }catch (Exception e){
+            System.out.println(ERROR);
         }
     }
+    void getAvailableBanks(String request){
+        try {
+            int r = Integer.parseInt(request.split(" ")[2]);
+            String coordinate = request.split(" ")[1];
+            coordinate = coordinate.substring(1, coordinate.length()-1);
+            int x = Integer.parseInt(coordinate.split(",")[0]);
+            int y = Integer.parseInt(coordinate.split(",")[1]);
+            dataBase.getAvailableBanks(x, y, r);
+        }catch (Exception e){
+            System.out.println(ERROR);
+        }
+    }
+    String deleteBranch(String request){
+        try {
+            String coordinates = request.split(" ")[1];
+            String[] coordinate = coordinates.substring(1, coordinates.length()-1).split(",");
+            int x = Integer.parseInt(coordinate[0]);
+            int y = Integer.parseInt(coordinate[1]);
+            return dataBase.deleteBranch(x, y);
+        }catch (Exception e){
+            return ERROR;
+        }
+    }
+    String undo(String request){
+        try {
+            int p = Integer.parseInt(request.split(" ")[1]);
+            if (p < this.commandCounter){
+                for (int i = 0; i <= p; i++) {
+                    String command = this.commands[i];
+                    switch (command.split(" ")[0]){
+                        case "addB":addBank(command);break;
+                        case "addBr":addBranch(command);break;
+                        case "addN":addNeighbourhood(command);break;
+                        case "delBr":deleteBranch(command);break;
+                        case "undo": undo(command);break;
+                        case "restart": dataBase.restart();break;
+                        default:break;
+                    }
+                }
+                return "returned to the"+ p +"th command.";
+            }else{
+                return "forbidden number!";
+            }
+
+        }catch (Exception e){
+            return ERROR;
+        }
+
+    }
     void printPreOrderBanks(){
-        dataBase.printPreOrderBanks();
+        try {
+            dataBase.printPreOrderBanks();
+        }catch (Exception e){
+            System.out.println("Something Went Wrong!");
+        }
     }
     void printPreOrderBranch(String request){
-        dataBase.printPreOrderBranches(request.split(" ")[1]);
+        try {
+            dataBase.printPreOrderBranches(request.split(" ")[1]);
+        }catch (Exception e){
+            System.out.println("Something Went Wrong!");
+        }
+
+    }
+    void getNearestBank(String request){
+        try {
+            String req = request.split(" ")[1];
+            request = req.substring(1, req.length()-1);
+            String[] coordinates = request.split(",");
+            int x = Integer.parseInt(coordinates[0]);
+            int y = Integer.parseInt(coordinates[1]);
+            dataBase.getNearestBank(x, y);
+        }catch (Exception e){
+            System.out.println(ERROR);
+        }
+    }
+    void getNearestBranch(String request){
+        try {
+            String name = request.split(" ")[1];
+            String req = request.split(" ")[2];
+            request = req.substring(1, req.length()-1);
+            String[] coordinates = request.split(",");
+            int x = Integer.parseInt(coordinates[0]);
+            int y = Integer.parseInt(coordinates[1]);
+            dataBase.getNearestBranch(name, x, y);
+        }catch (Exception e){
+            System.out.println(ERROR);
+        }
     }
 
 

@@ -11,6 +11,6 @@ public class Branch {
 
     @Override
     public String toString() {
-        return bankName+" -> "+branchName+"("+x+","+y+")";
+        return "BRANCH["+branchName+"("+x+","+y+")]";
     }
 }

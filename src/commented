@@ -33,3 +33,44 @@
                             n.right = null;
                         }
                     }*/
+
+                    /* Node findParent(int x, int y, int counter){
+                              int step = 0;
+                              Node parent = null;
+                              Node next = _root;
+                              int c = 0;
+                              while (next != null){
+                                  if (x == next.x && y == next.y){
+                                        c++;
+                                        if (c == counter){
+                                            break;
+                                        }
+                                  }
+                                  parent = next;
+                                  if (step % 2 == 0){
+                                      if (x >= parent.x){
+                                          next = next.right;
+                                      }else{
+                                          next = next.left;
+                                      }
+                                  }else {
+                                      if (y >= parent.y){
+                                          next = next.right;
+                                      }else{
+                                          next = next.left;
+                                      }
+                                  }
+                                  step++;
+                              }
+                              return parent;
+                          }*/
+                          /*void swap(Node n1, Node n2){
+                                    Node temp = new Node(n1.object, n1.x, n1.y);
+                                    n1.x = n2.x;
+                                    n1.y = n2.y;
+                                    n1.object = n2.object;
+                                    n2.x = temp.x;
+                                    n2.y = temp.y;
+                                    n2.object = temp.object;
+
+                                }*/

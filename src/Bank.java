@@ -12,6 +12,6 @@ public class Bank {
 
     @Override
     public String toString() {
-        return this.name+"(" +this.x+", "+this.y + ")";
+        return "BANK["+this.name+"(" +this.x+","+this.y + ")]";
     }
 }
