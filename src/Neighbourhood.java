@@ -1,10 +1,10 @@
 public class Neighbourhood {
     String name;
-    int x1, y1; // left down point
-    int x2, y2; // right up point
+    double x1, y1; // left down point
+    double x2, y2; // right up point
     int numberOfBanks;
 
-    public Neighbourhood(String name, int x1, int y1, int x2, int y2) {
+    public Neighbourhood(String name, double x1, double y1, double x2, double y2) {
         this.numberOfBanks = 0;
         this.name = name;
         this.x1 = x1;

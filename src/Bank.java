@@ -1,8 +1,8 @@
 public class Bank {
     String name;
-    int x, y, numberOfBranches;
+    double x, y, numberOfBranches;
     KDTree branches;
-    public Bank(String name, int x, int y){
+    public Bank(String name, double x, double y){
         this.name = name;
         this.x = x;
         this.y = y;

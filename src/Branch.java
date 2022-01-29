@@ -1,8 +1,8 @@
 public class Branch {
     String bankName;
     String branchName;
-    int x, y;
-    Branch(String bankName, String branchName, int x, int y){
+    double x, y;
+    Branch(String bankName, String branchName, double x, double y){
         this.bankName = bankName;
         this.branchName = branchName;
         this.x = x;

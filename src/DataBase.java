@@ -11,7 +11,7 @@ public class DataBase {
         bankTrieTree.root = new TNode();
         neighbourhoodsTrieTree.root = new TNode();
     }
-    public String addBank(String name, int x, int y){
+    public String addBank(String name, double x, double y){
         String answer;
         if (banks.isExistPoint(x, y)){
             answer = "there is a bank at this point :(";
@@ -25,7 +25,7 @@ public class DataBase {
         return answer;
     }
 
-    public String addBranch(String name, String branchName, int x, int y){
+    public String addBranch(String name, String branchName, double x, double y){
         String answer;
         if (banks.isExistPoint(x, y)){
             answer = "there is a bank at this point :(";
@@ -47,13 +47,6 @@ public class DataBase {
                 branches._root = branches.insert(branches._root ,node, 0);
                 Node node1 = new Node(new Branch(name, branchName, x, y), x, y);
                 banks._root = banks.insert(banks._root, node1, 0);
-               /* if (bankWithMostBranches == null){
-                    bankWithMostBranches = origin;
-                }else{
-                    if (origin.numberOfBranches > bankWithMostBranches.numberOfBranches){
-                        bankWithMostBranches = origin;
-                    }
-                }*/
                 answer = "the branch "+newBranch + " added to bank "+name + " branches :)";
             }
         }
@@ -80,15 +73,15 @@ public class DataBase {
 
     }
     String addNeighbourhood(String name, String[] coordinates){
-    int minX = 1000000;
-    int minY = 1000000;
-    int maxX = -1000000;
-    int maxY = -1000000;
+    double minX = 1000000;
+    double minY = 1000000;
+    double maxX = -1000000;
+    double maxY = -1000000;
         try {
             for (String coordinate:coordinates) {
                 String[] co = coordinate.substring(1, coordinate.length()-1).split(",");
-                int x = Integer.parseInt(co[0]);
-                int y = Integer.parseInt(co[1]);
+                double x = Double.parseDouble(co[0]);
+                double y = Double.parseDouble(co[1]);
                 if (x < minX){
                     minX = x;
                 }
@@ -157,7 +150,7 @@ public class DataBase {
             }
         }
     }
-    void getAvailableBanks(int x, int y, int r){
+    void getAvailableBanks(double x, double y, double r){
         try {
             getBanksOfNeighbourhood(this.banks._root, x, y, r, 0);
             if (this.numberOfAvailBanks != 0){
@@ -170,7 +163,7 @@ public class DataBase {
             System.out.println("Something Went Wrong!");
         }
     }
-    void getBanksOfNeighbourhood(Node node, int x, int y, int r, int step){
+    void getBanksOfNeighbourhood(Node node, double x, double y, double r, int step){
         if (node == null){
             return;
         }
@@ -199,10 +192,10 @@ public class DataBase {
             }
         }
     }
-    String deleteBranch(int x, int y) {
+    String deleteBranch(double x, double y) {
         Node node = banks.search(banks._root, x, y, 0);
         String answer;
-        if (node == null ) {
+        if (node == null) {
             answer = "bank doesn't exist!";
         } else if (node.object instanceof Bank){
             answer = "this bank is not a branch!";
@@ -210,19 +203,19 @@ public class DataBase {
             Branch branch = (Branch) node.object;
             String name = branch.bankName;
             Bank bank = (Bank) bankTrieTree.search(name).object;
-            //------------
+            // remove from bank bst.
             Node n = new Node(bank , bank.x, bank.y);
             banksBST.delete(n);
             bank.numberOfBranches--;
             banksBST.insert(n);
-            //------------
+            //______________
             KDTree branches = bank.branches;
             banks.deleteNode(banks._root, x, y, 0);
-            if (branches.isExistPoint(x, y)) {
-                branches._root = branches.deleteNode(branches._root, x, y, 0);
+            if (branches.isExistPoint(x,y)) {
+                branches.deleteNode(branches._root, x, y, 0);
                 answer = "deleted successfully! :)";
             } else {
-                answer = "bank " + name + " has not this branch!";
+                answer = "bank " + bank + " doesn't have this branch!";
             }
         }
         return answer;
@@ -260,24 +253,19 @@ public class DataBase {
     }
     void getBankWithMostBranches(){
         try {
-            /*if (bankWithMostBranches == null){
-                System.out.println("banks doesn't have branch");
-            }else{
-                System.out.println(bankWithMostBranches);
-            }*/
             System.out.println(banksBST.getMax().object);
         }catch (Exception e){
             System.out.println("something went wrong :(");
         }
     }
-    void getNearestBank(int x, int y){
+    void getNearestBank(double x, double y){
         try {
             getNearest(banks, x, y);
         }catch (Exception e){
             System.out.println("Something went Wrong!");
         }
     }
-    void getNearestBranch(String name, int x, int y){
+    void getNearestBranch(String name, double x, double y){
         try {
             TNode tNode = bankTrieTree.search(name);
             if (tNode == null){
@@ -295,7 +283,7 @@ public class DataBase {
             System.out.println("Something Went Wrong!");
         }
     }
-    void getNearest(KDTree banks,int x, int y){
+    void getNearest(KDTree banks,double x, double y){
         Node test = new Node(new Bank("null", 10000,10000), 10000, 10000);
         Object object = banks.getNearest(banks._root, x, y, test, 0).object;
         if (object instanceof Bank){

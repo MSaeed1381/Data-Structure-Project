@@ -1,15 +1,16 @@
 class Node{
     Object object;
     Node right, left;
-    int x, y;
+    double x, y;
 
-    Node(Object object, int x, int y){
+
+    Node(Object object, double x, double y){
         this.object = object;
         right = left = null;
         this.x = x;
         this.y = y;
     }
-    int distance(int x, int y){
+    double distance(double x, double y){
         return (this.x - x)*(this.x - x) + (this.y - y)*(this.y - y);
     }
 }
@@ -48,7 +49,7 @@ public class KDTree {
         printTree(root.left);
         printTree(root.right);
     }
-    Node search(Node root, int x, int y, int step) {
+    Node search(Node root, double x, double y, int step) {
         if (root == null) {
             return null;
         }
@@ -57,20 +58,20 @@ public class KDTree {
         }
         if (step % 2 == 0) {
             if (x >= root.x) {
-                return search(root.right, x, y, step + 1);
+                 return search(root.right, x, y, step + 1);
             } else {
-                return search(root.left, x, y, step + 1);
+                 return search(root.left, x, y, step + 1);
             }
         } else {
             if (y >= root.y) {
-                return search(root.right, x, y, step + 1);
+                 return search(root.right, x, y, step + 1);
             } else {
-                return search(root.left, x, y, step + 1);
+                 return search(root.left, x, y, step + 1);
             }
         }
     }
-    boolean isExistPoint(int x, int y){
-        return search(this._root, x, y, 0) != null;
+    boolean isExistPoint(double x, double y){
+        return  search(this._root, x, y, 0) != null;
     }
     Node findMinNode(Node root, int ooe, int step){ // ooe = odd or even
         if (root == null){
@@ -83,27 +84,23 @@ public class KDTree {
         }
         Node n1 = findMinNode(root.left, ooe, step+1);
         Node n2 = findMinNode(root.right, ooe, step+1);
-        if (n1 == null && n2 == null){
-            return root;
-        }else if (n1 == null){
-            return n2;
-        }else if (n2 == null){
-            return n1;
-        }else{
+        Node[] nodes = new Node[3];
+        nodes[0] = root;
+        nodes[1] = n1;
+        nodes[2] = n2;
+        Node answer = root;
+        for (Node node:nodes) {
             if (ooe == 0){
-                if (n1.x <= n2.x){
-                    return n1;
-                }else {
-                    return n2;
+                if (node != null && node.x <= answer.x){
+                    answer = node;
                 }
             }else{
-                if (n1.y < n2.y){
-                    return n1;
-                }else{
-                    return n2;
+                if (node != null && node.y < node.y){
+                    answer = node;
                 }
             }
         }
+        return answer;
 
     }
     void copy(Node n1, Node n2){
@@ -112,7 +109,7 @@ public class KDTree {
      n2.object = n1.object;
     }
 
-    Node deleteNode(Node root, int x, int y, int step) {
+    Node deleteNode(Node root, double x, double y, int step) {
         if (root == null) {
             return null;
         }
@@ -150,7 +147,7 @@ public class KDTree {
             return root;
     }
 
-    Node getNearest(Node root, int x, int y, Node best, int step){
+    Node getNearest(Node root, double x, double y, Node best, int step){
         Node goodSide;
         Node badSide;
         if (root == null){
@@ -178,34 +175,14 @@ public class KDTree {
         }
         best = getNearest(goodSide, x, y, best, step+1);
         if (step % 2 == 0){
-            if (badSide != null && (badSide.x * badSide.x < badSide.distance(x, y))){
+            if (badSide != null && badSide.x* badSide.x < best.distance(x, y)){
+                best = getNearest(badSide, x, y, best, step+1);
+            }
+        }else{
+            if (badSide != null && badSide.y* badSide.y < best.distance(x, y)){
                 best = getNearest(badSide, x, y, best, step+1);
             }
         }
         return best;
-    }
-
-
-
-    public static void main(String[] args) {
-        KDTree kdTree = new KDTree();
-        Node n1 = new Node(new Bank("salam", 1, 2), 1, 2);
-        Node n2 = new Node(new Bank("salam2", 3, 4), 3, 4);
-        Node n3 = new Node(new Bank("salam3", 5, 2), 5, 2);
-        Node n4 = new Node(new Bank("salam4", 0, 7), 0, 7);
-        Node n5 = new Node(new Bank("salam5", 6, 1), 6, 1);
-        Node n6 = new Node(new Bank("salam6", 6, 3), 6, 3);
-        kdTree._root = kdTree.insert(kdTree._root, n1, 0);
-        kdTree._root = kdTree.insert(kdTree._root, n2, 0);
-        kdTree._root = kdTree.insert(kdTree._root, n3, 0);
-        kdTree._root = kdTree.insert(kdTree._root, n4, 0);
-        kdTree._root = kdTree.insert(kdTree._root, n5, 0);
-        kdTree._root = kdTree.insert(kdTree._root, n6, 0);
-        System.out.println();
-        System.out.println(kdTree.getNearest(kdTree._root, 0, 8, new Node(new Bank("null", 10000,10000), 10000, 10000), 0).object);
-
-
-
-
     }
 }

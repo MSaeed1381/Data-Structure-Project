@@ -11,7 +11,7 @@ class Start {
     String[] commands;
     Start(){
         dataBase = new DataBase();
-        commands = new String[100];
+        commands = new String[10000];
         commands[0] = "restart";
     }
 
@@ -42,7 +42,7 @@ class Start {
                 default: System.out.println(ERROR);
             }
             commandCounter++;
-            System.out.println("---------------------------------");
+            System.out.println("________________________________________");
         }
     }
     public void help(){
@@ -73,7 +73,7 @@ class Start {
     public String addBank(String request){
         try {
             String[] coordinates = request.split(" ")[2].substring(1, request.split(" ")[2].length()-1).split(",");
-            return dataBase.addBank(request.split(" ")[1], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+            return dataBase.addBank(request.split(" ")[1], Double.parseDouble(coordinates[0]), Double.parseDouble(coordinates[1]));
         }catch (Exception e){
             return ERROR;
         }
@@ -81,7 +81,7 @@ class Start {
     public String addBranch(String request){
         try {
             String[] coordinates = request.split(" ")[3].substring(1, request.split(" ")[3].length()-1).split(",");
-            return dataBase.addBranch(request.split(" ")[1], request.split(" ")[2], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
+            return dataBase.addBranch(request.split(" ")[1], request.split(" ")[2], Double.parseDouble(coordinates[0]), Double.parseDouble(coordinates[1]));
         }catch (Exception e){
             e.printStackTrace();
             return ERROR;
@@ -107,12 +107,11 @@ class Start {
             return ERROR;
         }
     }
-    void getBankWithMostBranches(){ //TODO
+    void getBankWithMostBranches(){
         try {
             dataBase.getBankWithMostBranches();
         }catch (Exception e){
-            e.printStackTrace();
-            System.out.println(ERROR);
+            System.out.println("mostBrs : "+ERROR);
         }
     }
     void listBanksNeighbourhood(String request){
@@ -124,11 +123,11 @@ class Start {
     }
     void getAvailableBanks(String request){
         try {
-            int r = Integer.parseInt(request.split(" ")[2]);
+            double r = Double.parseDouble(request.split(" ")[2]);
             String coordinate = request.split(" ")[1];
             coordinate = coordinate.substring(1, coordinate.length()-1);
-            int x = Integer.parseInt(coordinate.split(",")[0]);
-            int y = Integer.parseInt(coordinate.split(",")[1]);
+            double x = Double.parseDouble(coordinate.split(",")[0]);
+            double y = Double.parseDouble(coordinate.split(",")[1]);
             dataBase.getAvailableBanks(x, y, r);
         }catch (Exception e){
             System.out.println(ERROR);
@@ -138,8 +137,8 @@ class Start {
         try {
             String coordinates = request.split(" ")[1];
             String[] coordinate = coordinates.substring(1, coordinates.length()-1).split(",");
-            int x = Integer.parseInt(coordinate[0]);
-            int y = Integer.parseInt(coordinate[1]);
+            double x = Double.parseDouble(coordinate[0]);
+            double y = Double.parseDouble(coordinate[1]);
             return dataBase.deleteBranch(x, y);
         }catch (Exception e){
             e.printStackTrace();
@@ -166,11 +165,9 @@ class Start {
             }else{
                 return "forbidden number!";
             }
-
         }catch (Exception e){
             return ERROR;
         }
-
     }
     void printPreOrderBanks(){
         try {
@@ -192,8 +189,8 @@ class Start {
             String req = request.split(" ")[1];
             request = req.substring(1, req.length()-1);
             String[] coordinates = request.split(",");
-            int x = Integer.parseInt(coordinates[0]);
-            int y = Integer.parseInt(coordinates[1]);
+            double x = Double.parseDouble(coordinates[0]);
+            double y = Double.parseDouble(coordinates[1]);
             dataBase.getNearestBank(x, y);
         }catch (Exception e){
             System.out.println(ERROR);
@@ -205,8 +202,8 @@ class Start {
             String req = request.split(" ")[2];
             request = req.substring(1, req.length()-1);
             String[] coordinates = request.split(",");
-            int x = Integer.parseInt(coordinates[0]);
-            int y = Integer.parseInt(coordinates[1]);
+            double x = Double.parseDouble(coordinates[0]);
+            double y = Double.parseDouble(coordinates[1]);
             dataBase.getNearestBranch(name, x, y);
         }catch (Exception e){
             System.out.println(ERROR);

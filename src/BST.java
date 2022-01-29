@@ -73,26 +73,4 @@ public class BST {
         }
         return temp;
     }
-    public Node search(Node root, Node node) {
-        if (root==null || equal(root, node)){
-        return root;
-    }
-        Bank rootBank = (Bank) root.object;
-        Bank nodeBank = (Bank) node.object;
-        if (rootBank.numberOfBranches < nodeBank.numberOfBranches)
-            return search(root.right, node);
-        return search(root.left, node);
-    }
-    boolean isEmpty(Node node){
-        return search(root, node) == null;
-    }
-    void print(Node root){
-        if (root == null){
-            return;
-        }
-        System.out.println(root.object);
-        print(root.left);
-        print(root.right);
-    }
-
 }
