@@ -1,11 +1,14 @@
 public class BST {
-    private Node root;
+     Node root;
 
     BST() {
         this.root = null;
     }
     void insert(Node node) {
         root = insertNode(root, node);
+    }
+    boolean equal(Node n1, Node n2){
+        return n1.x == n2.x && n1.y == n2.y;
     }
 
     Node insertNode(Node root, Node node) {
@@ -15,30 +18,28 @@ public class BST {
 
         Bank rootBank = (Bank) root.object;
         Bank nodeBank = (Bank) node.object;
-        if (nodeBank.numberOfBranches < rootBank.numberOfBranches) {
+        if (equal(root, node)){
+            return root;
+        }
+        else if (nodeBank.numberOfBranches < rootBank.numberOfBranches) {
             root.left = insertNode(root.left, node);
-        } else if (nodeBank.numberOfBranches > rootBank.numberOfBranches) {
+        } else {
             root.right = insertNode(root.right, node);
         }
-
-        return root;
+    return root;
     }
 
-    void deleteKey(Node node) {
-        root = deleteRec(root, node);
+    void delete(Node node) {
+        root = deleteNode(root, node);
     }
 
-    Node deleteRec(Node root, Node node) {
+    Node deleteNode(Node root, Node node) {
         if (root == null){
             return null;
         }
         Bank rootBank = (Bank) root.object;
         Bank nodeBank = (Bank) node.object;
-        if (nodeBank.numberOfBranches < rootBank.numberOfBranches)
-            root.left = deleteRec(root.left, node);
-        else if (nodeBank.numberOfBranches > rootBank.numberOfBranches)
-            root.right = deleteRec(root.right, node);
-        else if (rootBank.name.equals(nodeBank.name)){
+        if (equal(root, node)){
             if (root.left == null){
                 return root.right;
             }
@@ -46,20 +47,24 @@ public class BST {
                 return root.left;
             }
 
-            root.object = minValue(root.right);
-            root.right = deleteRec(root.right, node);
+            root.object = getRightMin(root.right);
+            root.right = deleteNode(root.right, node);
         }
-
+        else if (nodeBank.numberOfBranches < rootBank.numberOfBranches){
+            root.left = deleteNode(root.left, node);
+        } else {
+            root.right = deleteNode(root.right, node);
+        }
         return root;
     }
 
-    int minValue(Node root) {
-        int min = ((Bank)root.object).numberOfBranches;
+    Bank getRightMin(Node root) {
+        Bank minBank = ((Bank)(root.object));
         while (root.left != null) {
-            min = ((Bank)root.left.object).numberOfBranches;
+            minBank = ((Bank)root.left.object);
             root = root.left;
         }
-        return min;
+        return minBank;
     }
     Node getMax(){
         Node temp = this.root;
@@ -69,7 +74,7 @@ public class BST {
         return temp;
     }
     public Node search(Node root, Node node) {
-        if (root==null || (((Bank) root.object).name.equals(((Bank) node.object).name))){
+        if (root==null || equal(root, node)){
         return root;
     }
         Bank rootBank = (Bank) root.object;
@@ -80,6 +85,14 @@ public class BST {
     }
     boolean isEmpty(Node node){
         return search(root, node) == null;
+    }
+    void print(Node root){
+        if (root == null){
+            return;
+        }
+        System.out.println(root.object);
+        print(root.left);
+        print(root.right);
     }
 
 }

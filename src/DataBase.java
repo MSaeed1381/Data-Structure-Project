@@ -38,11 +38,10 @@ public class DataBase {
                 Node node = new Node(newBranch, x, y);
                 Bank origin = (Bank) bankTrieTree.search(name).object;
                 //--------
-                if (!banksBST.isEmpty(new Node(origin, origin.x, origin.y))){
-                    banksBST.deleteKey(new Node(origin, origin.x, origin.y));
-                }
+                Node n = new Node(origin, origin.x, origin.y);
+                banksBST.delete(n);
                 origin.numberOfBranches++;
-                banksBST.insert(new Node(origin, origin.x, origin.y));
+                banksBST.insert(n);
                 //--------
                 KDTree branches = origin.branches;
                 branches._root = branches.insert(branches._root ,node, 0);
@@ -211,6 +210,12 @@ public class DataBase {
             Branch branch = (Branch) node.object;
             String name = branch.bankName;
             Bank bank = (Bank) bankTrieTree.search(name).object;
+            //------------
+            Node n = new Node(bank , bank.x, bank.y);
+            banksBST.delete(n);
+            bank.numberOfBranches--;
+            banksBST.insert(n);
+            //------------
             KDTree branches = bank.branches;
             banks.deleteNode(banks._root, x, y, 0);
             if (branches.isExistPoint(x, y)) {

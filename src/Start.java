@@ -111,6 +111,7 @@ class Start {
         try {
             dataBase.getBankWithMostBranches();
         }catch (Exception e){
+            e.printStackTrace();
             System.out.println(ERROR);
         }
     }
@@ -141,6 +142,7 @@ class Start {
             int y = Integer.parseInt(coordinate[1]);
             return dataBase.deleteBranch(x, y);
         }catch (Exception e){
+            e.printStackTrace();
             return ERROR;
         }
     }
