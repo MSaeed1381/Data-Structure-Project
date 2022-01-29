@@ -3,6 +3,7 @@ public class DataBase {
     KDTree banks = new KDTree();
     TrieTree bankTrieTree = new TrieTree();
     TrieTree neighbourhoodsTrieTree = new TrieTree();
+    BST banksBST = new BST();
     int numberOfAvailBanks;
 
     DataBase(){
@@ -30,22 +31,32 @@ public class DataBase {
             answer = "there is a bank at this point :(";
         }
         else {
-            Branch newBranch = new Branch(name, branchName, x, y);
-            Node node = new Node(newBranch, x, y);
-            Bank origin = (Bank) bankTrieTree.search(name).object;
-            origin.numberOfBranches++;
-            KDTree branches = origin.branches;
-            branches._root = branches.insert(branches._root ,node, 0);
-            Node node1 = new Node(new Branch(name, branchName, x, y), x, y);
-            banks._root = banks.insert(banks._root, node1, 0);
-            if (bankWithMostBranches == null){
-                bankWithMostBranches = origin;
-            }else{
-                if (origin.numberOfBranches > bankWithMostBranches.numberOfBranches){
-                    bankWithMostBranches = origin;
+            if (bankTrieTree.search(name) == null){
+                answer = "the bank " + name + " doesn't exist :/";
+            }else {
+                Branch newBranch = new Branch(name, branchName, x, y);
+                Node node = new Node(newBranch, x, y);
+                Bank origin = (Bank) bankTrieTree.search(name).object;
+                //--------
+                if (!banksBST.isEmpty(new Node(origin, origin.x, origin.y))){
+                    banksBST.deleteKey(new Node(origin, origin.x, origin.y));
                 }
+                origin.numberOfBranches++;
+                banksBST.insert(new Node(origin, origin.x, origin.y));
+                //--------
+                KDTree branches = origin.branches;
+                branches._root = branches.insert(branches._root ,node, 0);
+                Node node1 = new Node(new Branch(name, branchName, x, y), x, y);
+                banks._root = banks.insert(banks._root, node1, 0);
+               /* if (bankWithMostBranches == null){
+                    bankWithMostBranches = origin;
+                }else{
+                    if (origin.numberOfBranches > bankWithMostBranches.numberOfBranches){
+                        bankWithMostBranches = origin;
+                    }
+                }*/
+                answer = "the branch "+newBranch + " added to bank "+name + " branches :)";
             }
-            answer = "the branch "+newBranch + " added to bank "+name + " branches :)";
         }
         return answer;
     }
@@ -122,9 +133,6 @@ public class DataBase {
     void getBanksOfNeighbourhood(Node node, Neighbourhood neighbourhood, int step){
         if (node == null){
             return;
-        }
-        if (node.object instanceof Bank){
-            getBanksOfNeighbourhood(((Bank) node.object).branches._root, neighbourhood, 0);
         }
         if (node.x >= neighbourhood.x1 && node.x <= neighbourhood.x2 && node.y >= neighbourhood.y1 && node.y <= neighbourhood.y2){
             System.out.print(node.object+" ");
@@ -247,11 +255,12 @@ public class DataBase {
     }
     void getBankWithMostBranches(){
         try {
-            if (bankWithMostBranches == null){
+            /*if (bankWithMostBranches == null){
                 System.out.println("banks doesn't have branch");
             }else{
                 System.out.println(bankWithMostBranches);
-            }
+            }*/
+            System.out.println(banksBST.getMax().object);
         }catch (Exception e){
             System.out.println("something went wrong :(");
         }

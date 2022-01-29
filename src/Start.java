@@ -54,11 +54,12 @@ class Start {
         System.out.println("5. mostBrs");
         System.out.println("6. listB [name]");
         System.out.println("7. availB [(x,y)] r");
-        System.out.println("8. delBr [name of bank] [(x,y)]");
+        System.out.println("8. delBr [(x,y)]");
         System.out.println("9. undo [p]  -> (p = 0 restart the system)");
         System.out.println("10. printPreB");
         System.out.println("11. printPreBr [name]");
         System.out.println("12. nearB [(x,y)]");
+        System.out.println("13. nearBr [name] [(x,y)]");
     }
     public void welcome(){
         System.out.println("""
@@ -82,6 +83,7 @@ class Start {
             String[] coordinates = request.split(" ")[3].substring(1, request.split(" ")[3].length()-1).split(",");
             return dataBase.addBranch(request.split(" ")[1], request.split(" ")[2], Integer.parseInt(coordinates[0]), Integer.parseInt(coordinates[1]));
         }catch (Exception e){
+            e.printStackTrace();
             return ERROR;
         }
     }
@@ -208,7 +210,5 @@ class Start {
             System.out.println(ERROR);
         }
     }
-
-
 }
 
